@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
+import { pool, testConnection } from './database';
 
 dotenv.config();
 
@@ -19,11 +20,24 @@ app.use(cookieParser('dev'));
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.get("/", (req, res) => {
-  res.send("Document tracker API is running");
+testConnection();
+
+app.get("/time", async (req, res) => {
+  console.log(`Query parameter: ${JSON.stringify(req.query)}`);
+  console.log(`Headers: ${JSON.stringify(req.headers)}`);
+  console.log(`Method: ${JSON.stringify(req.method)}`);
+
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ dbTime: result.rows[0].now });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database query failed");
+  }
 });
 
-//put api routes here
+
+//use api routes here
 
 const PORT = process.env.PORT || 6000;
 app.listen(PORT, () => {
