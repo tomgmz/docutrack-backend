@@ -3,6 +3,11 @@ import { generateGoogleNonce, exchangeGoogleCode } from "../services/authGoogle.
 
 export const redirectToGoogle = (req: Request, res: Response) => {
   const next = (req.query.next as string) || "/";
+
+  // Dynamically use origin or fallback to env or localhost
+  const frontendBaseUrl =
+    req.headers.origin?.toString() || process.env.FRONTEND_BASE_URL || "http://localhost:3000";
+
   const { raw: nonce, hashed: hashedNonce } = generateGoogleNonce();
 
   res.cookie("supabase_nonce", nonce, {
@@ -12,7 +17,7 @@ export const redirectToGoogle = (req: Request, res: Response) => {
     maxAge: 5 * 60 * 1000,
   });
 
-  const url = `https://rwxxmhqtwcgumihhimxg.supabase.co/auth/v1/authorize?provider=google&redirect_to=${process.env.FRONTEND_BASE_URL}/auth/callback&nonce=${hashedNonce}`;
+  const url = `https://rwxxmhqtwcgumihhimxg.supabase.co/auth/v1/authorize?provider=google&redirect_to=${frontendBaseUrl}/auth/callback&nonce=${hashedNonce}`;
 
   res.redirect(url);
 };
