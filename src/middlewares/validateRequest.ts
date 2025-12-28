@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodSchema } from "zod";
+import { ZodError } from "zod";
 
-export const validateRequest =
-  (schema: ZodSchema<any>) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req);
-    if (!result.success) {
-      return res.status(400).json({ errors: result.error.format() });
-    }
+export const validateRequest = (schema: any) => (req: Request, res: Response, next: NextFunction) => {
+  try {
+    schema.parse(req.body);
     next();
-  };
+  } catch (err: unknown) {
+    if (err instanceof ZodError) {
+      return res.status(400).json({ message: err.issues[0].message });
+    }
+    return res.status(400).json({ message: "Invalid request" });
+  }
+};

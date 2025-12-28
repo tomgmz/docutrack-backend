@@ -15,7 +15,7 @@ export const createProfile = async (profileData: CreateProfileInput) => {
     .from("profiles")
     .insert([profileData])
     .select()
-    .single(); // returns the inserted row directly
+    .single(); 
 
   if (error) throw error;
   return data;
