@@ -1,0 +1,14 @@
+# dependencies
+/node_modules
+
+# env files
+.env
+.env.*
+
+# typescript/build
+/dist
+/build
+*.tsbuildinfo
+
+# misc
+.DS_Store
