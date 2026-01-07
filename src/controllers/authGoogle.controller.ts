@@ -22,6 +22,7 @@ export const redirectToGoogle = async (req: Request, res: Response) => {
 };
 
 export const googleCallback = async (req: Request, res: Response) => {
+  console.log("Callback received. Query params:", req.query);
   const code = req.query.code as string;
   const frontendUrl = process.env.FRONTEND_BASE_URL || "http://localhost:3000";
 
