@@ -48,19 +48,18 @@ export const googleCallback = async (req: Request, res: Response) => {
     res.cookie("sb-access-token", session.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       path: "/",
       maxAge: session.expires_in * 1000,
     });
 
     res.redirect(`${frontendUrl}/userHome`);
   } catch (err: any) {
-  console.error("DEBUG - Full Error:", err); // Log the full object to terminal
   res.status(500).json({
     message: "Authentication failed",
     error: err.message,
     details: err.stack,
-    code: err.code // Look for ENOTFOUND or 400
+    code: err.code
   });
 }
 };
