@@ -47,7 +47,7 @@ export const googleCallback = async (req: Request, res: Response) => {
     // Set cookie for Next.js
     res.cookie("sb-access-token", session.access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
       path: "/",
       maxAge: session.expires_in * 1000,
