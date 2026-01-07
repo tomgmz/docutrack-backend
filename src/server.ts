@@ -4,6 +4,7 @@ import googleRoutes from './routes/authGoogle.routes'
 import cors from 'cors'
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 
 const app = express();
 
